@@ -22,4 +22,6 @@ typedef enum Token {
     TokenType token;
 } Token; */
 
+char *getTokenName(Token token);
+
 #endif

@@ -4,6 +4,7 @@
 #include "Scanner.h"
 #include "Parser.h"
 #include "Symbtab.h"
+#include "Token.h"
 
 int main(int argc, char **argv) {
 
@@ -15,7 +16,13 @@ int main(int argc, char **argv) {
     Scanner scanner;
     Symbtab symbtab;
 
-    nextToken(&scanner, &symbtab);
+    initSymbTab(&symbtab);
+    addSymbol(&symbtab, "x", TOK_ID);
+    addSymbol(&symbtab, "z", TOK_ID);
+    printf("%d\n", lookup(&symbtab, "x"));
+    printf("%d\n", lookup(&symbtab, "z"));
+
+    //nextToken(&scanner, &symbtab);
 
     return 0;
 }

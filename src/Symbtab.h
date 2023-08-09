@@ -1,5 +1,4 @@
 #include "Token.h"
-#include <stddef.h>
 #include <stdbool.h>
 
 #ifndef SYMBTAB_H
@@ -16,8 +15,8 @@ typedef struct Symbol {
 // En fait c'est une énorme dynamic array.
 typedef struct Symbtab {
     Symbol *symboles;
-    size_t count;
-    size_t capacity;
+    int count;
+    int capacity;
 } Symbtab;
 
 // Créer des fonctions d'allocations pour la table des symboles.
@@ -25,7 +24,8 @@ typedef struct Symbtab {
 // Comment suivre en temps réel la table des symboles qui grossit.
 
 void initSymbTab(Symbtab *symbtab);
-void addSymbol(Symbtab *symbtab, const char *lexeme, Token token); // Pour l'ajout de symboles.
+int addSymbol(Symbtab *symbtab, const char *lexeme, Token token); // Pour l'ajout de symboles.
+Token getToken(Symbtab *symbtab, int i);
 int lookup(Symbtab *symbtab, const char *lexeme);
 void freeSymbTab(Symbtab *symbtab);
 void reallocate(Symbtab *symbtab);
