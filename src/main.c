@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
     Scanner scanner;
     Symbtab symbtab;
 
-    nextToken(&scanner);
+    nextToken(&scanner, &symbtab);
 
     return 0;
 }

@@ -9,7 +9,8 @@
 /* Voici le scanner/lexer, c'est lui qui se charge de lire
  * le fichier source caractères par caractères. */
 
-void initScanner(Scanner *scanner) {
+void initScanner(Scanner *scanner, Symbtab *symbtab) {
+    scanner->symbtab = symbtab;
     scanner->fichier_source = fopen("test/string.txt", "r");
     // scanner->fichier_source = fopen(filePath, "r");
     scanner->start = 0; // Le départ de l'automate
@@ -22,7 +23,8 @@ void initScanner(Scanner *scanner) {
     return;
 }
 
-void closeScanner(Scanner *scanner) {
+void closeScanner(Scanner *scanner, Symbtab *symbtab) {
+    freeSymbTab(symbtab);
     fclose(scanner->fichier_source);
 
     return;
@@ -49,9 +51,9 @@ int fail(Scanner *scanner) {
 
 
 // Voir comment reculer la tête de lecture.
-Tuple nextToken(Scanner *scanner) {
+Tuple nextToken(Scanner *scanner, Symbtab *symbtab) {
     // Pour initialiser le scanner.
-    initScanner(scanner);
+    initScanner(scanner, symbtab);
 
     char c;
     int state; // Etat de la machine.
@@ -125,7 +127,6 @@ bool isNumber(char c) {
 
 // Reconnaissance des lettres.
 bool isLetter(char c) {
-
     char lettres[] = {
         'a', 'b', 'c',
         'd', 'e', 'f',
