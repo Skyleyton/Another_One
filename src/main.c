@@ -17,10 +17,11 @@ int main(int argc, char **argv) {
     Symbtab symbtab;
 
     initSymbTab(&symbtab);
-    addSymbol(&symbtab, "x", TOK_ID);
+    addSymbol(&symbtab, "1", TOK_NUM);
     addSymbol(&symbtab, "z", TOK_ID);
-    printf("%d\n", lookup(&symbtab, "x"));
+    printf("%d\n", lookup(&symbtab, "1"));
     printf("%d\n", lookup(&symbtab, "z"));
+    printf("Token à la position 0: %s\n", getToken(&symbtab, 0));
 
     //nextToken(&scanner, &symbtab);
 

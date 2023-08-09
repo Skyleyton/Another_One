@@ -25,10 +25,13 @@ typedef struct Symbtab {
 
 void initSymbTab(Symbtab *symbtab);
 int addSymbol(Symbtab *symbtab, const char *lexeme, Token token); // Pour l'ajout de symboles.
-Token getToken(Symbtab *symbtab, int i);
+char *getToken(Symbtab *symbtab, int i);
 int lookup(Symbtab *symbtab, const char *lexeme);
 void freeSymbTab(Symbtab *symbtab);
 void reallocate(Symbtab *symbtab);
 bool checkCapacity(Symbtab *symbtab);
+
+// Juste pour le débogage.
+char *getLexeme(Symbtab *symbtab, int i);
 
 #endif

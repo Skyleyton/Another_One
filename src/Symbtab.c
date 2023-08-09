@@ -1,4 +1,5 @@
 #include "Symbtab.h"
+#include "Token.h"
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -28,8 +29,16 @@ int addSymbol(Symbtab *symbtab, const char *lexeme, Token token) {
     return symbtab->count;
 }
 
-Token getToken(Symbtab *symbtab, int i) {
-    return symbtab->symboles[i].token;
+/* Pour renvoyer le token à la position "i", utilise getTokenName pour traduire le 
+token en string. */
+char *getToken(Symbtab *symbtab, int i) {
+    if (symbtab->count < i) {
+        fprintf(stderr, "Accès à un token qui n'est pas dans la table des symboles.\n");
+
+        return "NULL";
+    }
+
+    return getTokenName(symbtab->symboles[i].token);
 }
 
 // Pour la réallocation, se fait automatiquement en ajoutant des symboles.
@@ -69,6 +78,7 @@ int lookup(Symbtab *symbtab, const char *lexeme) {
     return -1;
 }
 
+// Pour désallouer la table des symboles.
 void freeSymbTab(Symbtab *symbtab) {
     for (size_t i = 0; i < symbtab->count; ++i) {
         free(symbtab->symboles[i].lexeme);
@@ -77,4 +87,9 @@ void freeSymbTab(Symbtab *symbtab) {
     free(symbtab->symboles);
 
     return;
+}
+
+// Pour récupérer le lexeme à la position i, sert uniquement au débogage.
+char *getLexeme(Symbtab *symbtab, int i) {
+    return symbtab->symboles[i].lexeme;
 }
