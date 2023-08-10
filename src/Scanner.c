@@ -45,7 +45,7 @@ int fail(Scanner *scanner) {
         scanner->start = 11;
     }
     else if (scanner->start == 11) {
-        fprintf(stderr, "Erreur lexicale: ligne %d\n", scanner->ligne);
+        fprintf(stderr, "Aucune ligne dans le fichier.\n");
         exit(64);
     }
     else {
@@ -136,7 +136,7 @@ Tuple nextToken(Scanner *scanner, Symbtab *symbtab) {
                 state = 8;
             }
             else if (isLetter(c)) {
-                fprintf(stderr, "Erreur lexicale ligne: %d\n", scanner->ligne);
+                fprintf(stderr, "Erreur lexicale ligne (state 7): %d\n", scanner->ligne);
                 exit(64);
             }
             else {
@@ -150,7 +150,7 @@ Tuple nextToken(Scanner *scanner, Symbtab *symbtab) {
                 state = 9;
             }
             else {
-                fprintf(stderr, "Erreur lexicale ligne : %d\n", scanner->ligne);
+                fprintf(stderr, "Erreur lexicale ligne (state 8): %d\n", scanner->ligne);
                 exit(64);
             }
         }
@@ -167,6 +167,8 @@ Tuple nextToken(Scanner *scanner, Symbtab *symbtab) {
         }
         else if (state == 10) {
             fseek(scanner->fichier_source, pos_pointeur, SEEK_SET);
+            p = addSymbol(symbtab, lexbuf, TOK_NUM);
+
             Tuple result = {getTokenName(TOK_NUM), lexbuf};
             return result;
         }
@@ -183,10 +185,14 @@ Tuple nextToken(Scanner *scanner, Symbtab *symbtab) {
                 Tuple result = {getTokenName(TOK_MINUS), NULL};
                 return result;
             }
+            else if (c == '/') {
+                Tuple result = {getTokenName(TOK_DIV), NULL};
+                return result;
+            }
             else state = fail(scanner);
         }
         else {
-            fprintf(stderr, "Erreur lexicale ligne: %d", scanner->ligne);
+            fprintf(stderr, "Erreur lexicale ligne (EOF): %d", scanner->ligne);
         }
     }
 

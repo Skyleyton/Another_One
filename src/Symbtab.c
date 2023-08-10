@@ -94,6 +94,7 @@ char *getLexeme(Symbtab *symbtab, int i) {
     return symbtab->symboles[i].lexeme;
 }
 
+// Fonction d'affichage de la table des symboles.
 void affichSymbTab(Symbtab *symbtab) {
 
     printf("-------- SymbTab -------\n");
