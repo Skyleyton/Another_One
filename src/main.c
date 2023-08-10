@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
     initSymbTab(&symbtab);
     initScanner(&scanner, &symbtab);
     // printf("etat: %d\n", scanner.start);
-    // printf("token: %s\n", nextToken(&scanner, &symbtab).token);
+    printf("%s\n", nextToken(&scanner, &symbtab).token);
     printf("etat: %d\n", scanner.start);
 
     /* for (int i = 0; i < 10; ++i) {

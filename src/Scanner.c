@@ -111,13 +111,14 @@ Tuple nextToken(Scanner *scanner, Symbtab *symbtab) {
             fseek(scanner->fichier_source, pos_pointeur, SEEK_SET);
             p = addSymbol(symbtab, lexbuf, TOK_ID);
 
-            Tuple result = {getToken(symbtab, p)};
+            // Tuple result = {getToken(symbtab, p)};
+            Tuple result = {getTokenName(TOK_ID), lexbuf};
             return result;
         }
         // Les nombres : TOK_NUM.
         else if (state == 6) {
-            printf("debug\n");
             if (isNumber(c)) {
+                printf("debug\n");
                 appendChar(lexbuf, c);
                 state = 7;
             }
