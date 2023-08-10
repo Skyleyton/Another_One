@@ -89,7 +89,7 @@ void freeSymbTab(Symbtab *symbtab) {
     return;
 }
 
-// Pour récupérer le lexeme à la position i, sert uniquement au débogage.
+// Pour récupérer le lexeme à la position i, va servir au débogage.
 char *getLexeme(Symbtab *symbtab, int i) {
     return symbtab->symboles[i].lexeme;
 }

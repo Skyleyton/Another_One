@@ -17,6 +17,7 @@ void initScanner(Scanner *scanner, Symbtab *symbtab);
 void closeScanner(Scanner *scanner, Symbtab *symbtab);
 Tuple nextToken(Scanner *scanner, Symbtab *symbtab);
 int fail(Scanner *scanner);
+int appendChar(char *chaine, char c);
 
 // Pour détecter les lettres et les chiffres.
 bool isLetter(char c);

@@ -6,7 +6,6 @@ char *getTokenName(Token token) {
     char *name;
 
     switch (token) {
-
         case TOK_NUM:
             name = "num";
             break;

@@ -17,11 +17,18 @@ int main(int argc, char **argv) {
     Symbtab symbtab;
 
     initSymbTab(&symbtab);
-    addSymbol(&symbtab, "1", TOK_NUM);
+    initScanner(&scanner, &symbtab);
+    printf("etat: %d\n", scanner.start);
+    printf("token: %s\n", nextToken(&scanner, &symbtab).token);
+    printf("etat: %d\n", scanner.start);
+    // printf("%s\n", getLexeme(&symbtab, 2));
+
+    // Les essais à la main.
+    /* addSymbol(&symbtab, "1", TOK_NUM);
     addSymbol(&symbtab, "z", TOK_ID);
     printf("%d\n", lookup(&symbtab, "1"));
     printf("%d\n", lookup(&symbtab, "z"));
-    printf("Token à la position 0: %s\n", getToken(&symbtab, 0));
+    printf("Token à la position 0: %s\n", getToken(&symbtab, 0)); */
 
     //nextToken(&scanner, &symbtab);
 

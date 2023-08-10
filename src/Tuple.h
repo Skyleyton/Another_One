@@ -14,7 +14,7 @@
 // Token token est le type (enum) de token que le scanner enverra au parser.
 // void *attribut est l'information sur token.
 typedef struct Tuple {
-    Token token;
+    char *token;
     void *attribut;
 } Tuple;
 

@@ -3,8 +3,10 @@
 #include "Token.h"
 #include "Tuple.h" // Pour la génération des tuples
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* Voici le scanner/lexer, c'est lui qui se charge de lire
  * le fichier source caractères par caractères. */
@@ -14,7 +16,7 @@ void initScanner(Scanner *scanner, Symbtab *symbtab) {
     scanner->fichier_source = fopen("test/string.txt", "r");
     // scanner->fichier_source = fopen(filePath, "r");
     scanner->start = 0; // Le départ de l'automate
-    scanner->ligne = 0;
+    scanner->ligne = 1;
     if (scanner->fichier_source == NULL) {
         fprintf(stderr, "Échec de l'ouverture du fichier\n");
         return;
@@ -43,7 +45,8 @@ int fail(Scanner *scanner) {
         scanner->start = 11;
     }
     else if (scanner->start == 11) {
-        fprintf(stderr, "Erreur lexicale !\n");
+        fprintf(stderr, "Erreur lexicale: ligne %d\n", scanner->ligne);
+        exit(64);
     }
 
     return scanner->start;
@@ -56,17 +59,19 @@ Tuple nextToken(Scanner *scanner, Symbtab *symbtab) {
     initScanner(scanner, symbtab);
 
     char c;
-    int state; // Etat de la machine.
-    char *lexbuf = ""; // Buffer pour rajouter des caractères.
+    int state = 0; // Etat de la machine.
+    char *lexbuf = malloc(256 * sizeof(char)); // Buffer pour rajouter des caractères.
+    // Pour récup la chaine de caractères qu'on va changer à chaque ajout de caractère.
+    int p;
+    long pos_pointeur = 0;
 
-    while ((c = fgetc(scanner->fichier_source)) != EOF) {
+    //while ((c = fgetc(scanner->fichier_source)) != EOF) {
+    while (true) {
         // Les espaces/commentaires
         if (state == 0) {
-            if (c == ' ') {
+            c = fgetc(scanner->fichier_source);
+            if (c == ' ' || c == '\t') {
                 // Ne fais rien.
-            }
-            else if (c == '\t') {
-                // Ne fais rien, continue d'avancer.
             }
             else if (c == '\n' || c == '\r') scanner->ligne++; // Saut de ligne.
 
@@ -75,34 +80,104 @@ Tuple nextToken(Scanner *scanner, Symbtab *symbtab) {
             else {
                 state = fail(scanner);
                 // Pour une erreur à voir.
-                Tuple error = {TOK_ERROR, "Erreur lexicale"};
-                return error;
+                // Tuple error = {getTokenName(TOK_ERROR), "Erreur lexicale"};
+                // return error;
             }
         }
         // Les noms de variable: TOK_ID
         else if (state == 3) {
             // Détecter les lettres avec isLetter(char c)
             if (isLetter(c)) {
-                lexbuf = lexbuf + c; // Ajoute le caractère dans le buffer.
+                appendChar(lexbuf, c);
                 state = 4;
             }
             else state = fail(scanner);
         }
         else if (state == 4) {
+            // Pour récupérer la position et renvoyer au state 5.
+            pos_pointeur = ftell(scanner->fichier_source);
+            c = fgetc(scanner->fichier_source);
             if (isLetter(c) || isNumber(c)) {
-                lexbuf = lexbuf + c;
+                appendChar(lexbuf, c);
             }
             else state = 5;
         }
         else if (state == 5) {
-            state = fail(scanner);
-            Tuple num = {TOK_ID, "Var"};
+            // state = fail(scanner);
+            fseek(scanner->fichier_source, pos_pointeur, SEEK_SET);
+            p = addSymbol(symbtab, lexbuf, TOK_ID);
 
-            return num;
+            Tuple result = {getToken(symbtab, p)};
+            return result;
+        }
+        // Les nombres : TOK_NUM.
+        else if (state == 6) {
+            printf("debug");
+            if (isNumber(c)) {
+                appendChar(lexbuf, c);
+                state = 7;
+            }
+            else state = fail(scanner);
+        }
+        else if (state == 7) {
+            pos_pointeur = ftell(scanner->fichier_source);
+            c = fgetc(scanner->fichier_source);
+            if (isNumber(c)) {
+                appendChar(lexbuf, c);
+                // reste sur le state 7.
+            }
+            else if (c == '.') {
+                appendChar(lexbuf, c);
+                state = 8;
+            }
+            else if (isLetter(c)) {
+                fprintf(stderr, "Erreur lexicale ligne: %d\n", scanner->ligne);
+                exit(64);
+            }
+            else {
+                state = 10;
+            }
+        }
+        else if (state == 8) {
+            c = fgetc(scanner->fichier_source);
+            if (isNumber(c)) {
+                appendChar(lexbuf, c);
+                state = 9;
+            }
+            else {
+                fprintf(stderr, "Erreur lexicale ligne : %d\n", scanner->ligne);
+                exit(64);
+            }
+        }
+        else if (state == 9) {
+            pos_pointeur = ftell(scanner->fichier_source);
+            c = fgetc(scanner->fichier_source);
+            if (isNumber(c)) {
+                appendChar(lexbuf, c);
+                // reste sur le state 9.
+            }
+            else {
+                state = 10;
+            }
+        }
+        else if (state == 10) {
+            fseek(scanner->fichier_source, pos_pointeur, SEEK_SET);
+            Tuple result = {getTokenName(TOK_NUM), lexbuf};
+            return result;
+        }
+        else if (state == 11) {
+            if (c == '+' || c == '-') {
+                Tuple result = {getTokenName(TOK_ADD), NULL};
+                return result;
+            }
+            else state = fail(scanner);
+        }
+        else {
+            fprintf(stderr, "Erreur lexicale ligne: %d", scanner->ligne);
         }
     }
 
-    Tuple eof = {TOK_EOF, NULL};
+    Tuple eof = {getTokenName(TOK_EOF), NULL};
     return eof;
 }
 
@@ -140,10 +215,20 @@ bool isLetter(char c) {
     };
 
     for (int i = 0; i < 26; ++i) {
-        if (c == i) {
+        if (c == lettres[i] || c == toupper(lettres[i])) {
             return true;
         }
     }
 
     return false;
+}
+
+// Fonctions pour l'ajout de caractères dans le lexbuf.
+int appendChar(char *chaine, char c) {
+    int len = strlen(chaine);
+
+    chaine[len] = c;
+    chaine[len+1] = '\0';
+
+    return 0;
 }
