@@ -93,3 +93,17 @@ void freeSymbTab(Symbtab *symbtab) {
 char *getLexeme(Symbtab *symbtab, int i) {
     return symbtab->symboles[i].lexeme;
 }
+
+void affichSymbTab(Symbtab *symbtab) {
+
+    printf("-------- SymbTab -------\n");
+    printf("Lexeme\tToken\tPosition");
+
+    for (int i = 0; i < symbtab->count; ++i) {
+        printf("\n%s\t%s\t%d", getLexeme(symbtab, i), getToken(symbtab, i), i);
+    }
+
+    printf("\n------------------------\n");
+
+    return;
+}

@@ -21,6 +21,9 @@ char *getTokenName(Token token) {
         case TOK_MULT:
             name = "mult";
             break;
+        case TOK_AFFECT:
+            name = "affect";
+            break;
         case TOK_TYPE:
             name = "type_var";
             break;

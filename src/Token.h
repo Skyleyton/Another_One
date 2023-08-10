@@ -7,6 +7,7 @@ typedef enum Token {
     TOK_NUM, // Constantes numériques
     TOK_ADD, // Opérateur
     TOK_MINUS,
+    TOK_AFFECT,
     TOK_DIV,
     TOK_MULT,
     TOK_TYPE, // Type (f32, i32, u32)

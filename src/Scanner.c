@@ -48,6 +48,10 @@ int fail(Scanner *scanner) {
         fprintf(stderr, "Erreur lexicale: ligne %d\n", scanner->ligne);
         exit(64);
     }
+    else {
+        fprintf(stderr, "Erreur du scanner ligne: %d", scanner->ligne);
+        exit(64);
+    }
 
     return scanner->start;
 }
@@ -112,7 +116,7 @@ Tuple nextToken(Scanner *scanner, Symbtab *symbtab) {
         }
         // Les nombres : TOK_NUM.
         else if (state == 6) {
-            printf("debug");
+            printf("debug\n");
             if (isNumber(c)) {
                 appendChar(lexbuf, c);
                 state = 7;
@@ -166,8 +170,16 @@ Tuple nextToken(Scanner *scanner, Symbtab *symbtab) {
             return result;
         }
         else if (state == 11) {
-            if (c == '+' || c == '-') {
+            if (c == '+') {
                 Tuple result = {getTokenName(TOK_ADD), NULL};
+                return result;
+            }
+            else if (c == '=') {
+                Tuple result = {getTokenName(TOK_AFFECT), NULL};
+                return result;
+            }
+            else if (c == '-') {
+                Tuple result = {getTokenName(TOK_MINUS), NULL};
                 return result;
             }
             else state = fail(scanner);

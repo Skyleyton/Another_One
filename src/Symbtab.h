@@ -33,5 +33,6 @@ bool checkCapacity(Symbtab *symbtab);
 
 // Juste pour le débogage.
 char *getLexeme(Symbtab *symbtab, int i);
+void affichSymbTab(Symbtab *symbtab);
 
 #endif
