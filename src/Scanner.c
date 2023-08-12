@@ -118,7 +118,6 @@ Tuple nextToken(Scanner *scanner, Symbtab *symbtab) {
         // Les nombres : TOK_NUM.
         else if (state == 6) {
             if (isNumber(c)) {
-                printf("debug\n");
                 appendChar(lexbuf, c);
                 state = 7;
             }
@@ -187,6 +186,18 @@ Tuple nextToken(Scanner *scanner, Symbtab *symbtab) {
             }
             else if (c == '/') {
                 Tuple result = {getTokenName(TOK_DIV), NULL};
+                return result;
+            }
+            else if (c == '(') {
+                Tuple result = {getTokenName(TOK_L_PARENT), NULL};
+                return result;
+            }
+            else if (c == ')') {
+                Tuple result = {getTokenName(TOK_R_PARENT), NULL};
+                return result;
+            }
+            else if (c == ';') {
+                Tuple result = {getTokenName(TOK_SCOLON), NULL};
                 return result;
             }
             else state = fail(scanner);

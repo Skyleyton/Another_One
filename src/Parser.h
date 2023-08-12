@@ -16,5 +16,11 @@ typedef struct Parser {
 
 int initParser(Parser *parser, Scanner *scanner, Symbtab *symbtab);
 void match(Parser *parser, Token token); // À voir si ça fonctionne.
+void parse(Parser *parser);
+float T(Parser *parser);
+float F(Parser *parser);
+void L(Parser *parser);
+void I(Parser *parser);
+float E(Parser *parser);
 
 #endif

@@ -42,6 +42,15 @@ char *getTokenName(Token token) {
         case TOK_ERROR:
             name = "error";
             break;
+        case TOK_R_PARENT:
+            name = "right parenthesis";
+            break;
+        case TOK_L_PARENT:
+            name = "left parenthesis";
+            break;
+        case TOK_SCOLON:
+            name = "semi colon";
+            break;
     }
 
     return name;

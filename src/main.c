@@ -15,12 +15,13 @@ int main(int argc, char **argv) {
 
     Scanner scanner;
     Symbtab symbtab;
+    Parser parser;
 
     initSymbTab(&symbtab);
     initScanner(&scanner, &symbtab);
     // printf("etat: %d\n", scanner.start);
     printf("%s\n", nextToken(&scanner, &symbtab).token);
-    printf("etat: %d\n", scanner.start);
+    // printf("etat: %d\n", scanner.start);
 
     /* for (int i = 0; i < 10; ++i) {
         printf("lexeme: %s ", getLexeme(&symbtab, i));
@@ -33,6 +34,8 @@ int main(int argc, char **argv) {
     } */
 
     affichSymbTab(&symbtab);
+
+    parse(&parser);
     // printf("%s\n", getLexeme(&symbtab, 2));
 
     // Les essais à la main.

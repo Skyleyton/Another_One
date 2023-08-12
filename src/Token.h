@@ -15,7 +15,10 @@ typedef enum Token {
     TOK_TRUE, // Bool
     TOK_FALSE,
     TOK_EOF,
-    TOK_ERROR // Token signifiant une erreur dans l'analyse syntaxique.
+    TOK_ERROR, // Token signifiant une erreur dans l'analyse syntaxique.
+    TOK_R_PARENT,
+    TOK_L_PARENT,
+    TOK_SCOLON
 } Token;
 
 // à voir si besoin, je peux directement utiliser TokenType.

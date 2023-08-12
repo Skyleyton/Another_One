@@ -108,3 +108,13 @@ void affichSymbTab(Symbtab *symbtab) {
 
     return;
 }
+
+void setValue(Symbtab *symbtab, int i, float val) {
+    symbtab->symboles[i].value = val;
+
+    return;
+}
+
+float getValue(Symbtab *symbtab, int i) {
+    return symbtab->symboles[i].value;
+}

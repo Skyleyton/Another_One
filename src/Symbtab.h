@@ -8,6 +8,7 @@
 typedef struct Symbol {
     char *lexeme;
     Token token;
+    float value;
 } Symbol;
 
 
@@ -26,6 +27,8 @@ typedef struct Symbtab {
 void initSymbTab(Symbtab *symbtab);
 int addSymbol(Symbtab *symbtab, const char *lexeme, Token token); // Pour l'ajout de symboles.
 char *getToken(Symbtab *symbtab, int i);
+void setValue(Symbtab *symbtab, int i, float val);
+float getValue(Symbtab *symbtab, int i);
 int lookup(Symbtab *symbtab, const char *lexeme);
 void freeSymbTab(Symbtab *symbtab);
 void reallocate(Symbtab *symbtab);
